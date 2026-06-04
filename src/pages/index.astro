@@ -6,20 +6,55 @@ import { getFeaturedArticles, getPublishedArticles } from "../lib/articles";
 
 const featured = await getFeaturedArticles();
 const articles = await getPublishedArticles();
-const hero = featured[0] ?? articles[0];
+const heroSlides = (featured.length > 1 ? featured : articles.slice(0, 5)).slice(0, 6);
+const hero = heroSlides[0] ?? articles[0];
 const latest = articles.filter((article) => article.id !== hero?.id).slice(0, 6);
 ---
 
 <BaseLayout>
-  <section class="hero">
-    {hero && (
-      <a class="hero-feature" href={`/articles/${hero.slug}/`}>
-        {hero.data.cover && <img src={hero.data.cover} alt={hero.data.coverAlt ?? ""} />}
-        <div class="hero-feature-caption">
-          <span>{hero.data.section.replaceAll("-", " ")}</span>
-          <strong>{hero.data.title}</strong>
+  <section class="hero" data-hero-carousel>
+    {heroSlides.length > 0 && (
+      <div class="hero-feature">
+        <div class="hero-slides">
+          {heroSlides.map((slide, index) => (
+            <a
+              class:list={["hero-slide", { "is-active": index === 0 }]}
+              href={`/articles/${slide.slug}/`}
+              data-hero-slide
+              aria-hidden={index === 0 ? "false" : "true"}
+            >
+              {slide.data.cover && <img src={slide.data.cover} alt={slide.data.coverAlt ?? ""} />}
+              <div class="hero-feature-caption">
+                <span>{slide.data.section.replaceAll("-", " ")}</span>
+                <strong>{slide.data.title}</strong>
+              </div>
+            </a>
+          ))}
         </div>
-      </a>
+
+        {heroSlides.length > 1 && (
+          <>
+            <div class="hero-controls" aria-label="Navigation du hero">
+              <button type="button" data-hero-prev aria-label="Article précédent">
+                <span aria-hidden="true">‹</span>
+              </button>
+              <button type="button" data-hero-next aria-label="Article suivant">
+                <span aria-hidden="true">›</span>
+              </button>
+            </div>
+            <div class="hero-dots" aria-label="Slides du hero">
+              {heroSlides.map((slide, index) => (
+                <button
+                  type="button"
+                  class:list={{ "is-active": index === 0 }}
+                  data-hero-dot={index}
+                  aria-label={`Afficher ${slide.data.title}`}
+                />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
     )}
   </section>
 
@@ -59,3 +94,54 @@ const latest = articles.filter((article) => article.id !== hero?.id).slice(0, 6)
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  const root = document.querySelector("[data-hero-carousel]");
+
+  if (root) {
+    const slides = Array.from(root.querySelectorAll("[data-hero-slide]"));
+    const dots = Array.from(root.querySelectorAll("[data-hero-dot]"));
+    const previous = root.querySelector("[data-hero-prev]");
+    const next = root.querySelector("[data-hero-next]");
+    let activeIndex = 0;
+    let intervalId;
+
+    const showSlide = (nextIndex) => {
+      if (!slides.length) return;
+
+      activeIndex = (nextIndex + slides.length) % slides.length;
+      slides.forEach((slide, index) => {
+        const isActive = index === activeIndex;
+        slide.classList.toggle("is-active", isActive);
+        slide.setAttribute("aria-hidden", isActive ? "false" : "true");
+      });
+      dots.forEach((dot, index) => {
+        dot.classList.toggle("is-active", index === activeIndex);
+      });
+    };
+
+    const restartAutoplay = () => {
+      window.clearInterval(intervalId);
+      intervalId = window.setInterval(() => showSlide(activeIndex + 1), 9000);
+    };
+
+    previous?.addEventListener("click", () => {
+      showSlide(activeIndex - 1);
+      restartAutoplay();
+    });
+
+    next?.addEventListener("click", () => {
+      showSlide(activeIndex + 1);
+      restartAutoplay();
+    });
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener("click", () => {
+        showSlide(index);
+        restartAutoplay();
+      });
+    });
+
+    restartAutoplay();
+  }
+</script>
