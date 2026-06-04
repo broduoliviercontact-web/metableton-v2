@@ -7,6 +7,10 @@ import { getFeaturedArticles, getPublishedArticles } from "../lib/articles";
 const featured = await getFeaturedArticles();
 const articles = await getPublishedArticles();
 const heroSlides = (featured.length > 1 ? featured : articles.slice(0, 5)).slice(0, 6);
+const carouselSlides =
+  heroSlides.length > 1
+    ? [heroSlides[heroSlides.length - 1], ...heroSlides, heroSlides[0]]
+    : heroSlides;
 const hero = heroSlides[0] ?? articles[0];
 const latest = articles.filter((article) => article.id !== hero?.id).slice(0, 6);
 ---
@@ -15,13 +19,17 @@ const latest = articles.filter((article) => article.id !== hero?.id).slice(0, 6)
   <section class="hero" data-hero-carousel>
     {heroSlides.length > 0 && (
       <div class="hero-feature">
-        <div class="hero-slides">
-          {heroSlides.map((slide, index) => (
+        <div
+          class="hero-track"
+          data-hero-track
+          style={`--slide-count: ${carouselSlides.length}; --track-index: ${heroSlides.length > 1 ? 1 : 0};`}
+        >
+          {carouselSlides.map((slide, index) => (
             <a
-              class:list={["hero-slide", { "is-active": index === 0 }]}
+              class="hero-slide"
               href={`/articles/${slide.slug}/`}
               data-hero-slide
-              aria-hidden={index === 0 ? "false" : "true"}
+              aria-hidden={heroSlides.length > 1 ? (index === 1 ? "false" : "true") : "false"}
             >
               {slide.data.cover && <img src={slide.data.cover} alt={slide.data.coverAlt ?? ""} />}
               <div class="hero-feature-caption">
@@ -99,74 +107,90 @@ const latest = articles.filter((article) => article.id !== hero?.id).slice(0, 6)
   const root = document.querySelector("[data-hero-carousel]");
 
   if (root) {
+    const track = root.querySelector("[data-hero-track]");
+    const trackElement = track instanceof HTMLElement ? track : null;
     const slides = Array.from(root.querySelectorAll("[data-hero-slide]"));
     const dots = Array.from(root.querySelectorAll("[data-hero-dot]"));
     const previous = root.querySelector("[data-hero-prev]");
     const next = root.querySelector("[data-hero-next]");
+    const hasLoopClones = slides.length > dots.length;
+    const realSlideCount = dots.length || slides.length;
     let activeIndex = 0;
+    let trackIndex = hasLoopClones ? 1 : 0;
     let intervalId;
     let isAnimating = false;
 
-    const showSlide = (nextIndex, direction = "next") => {
-      if (!slides.length || isAnimating) return;
+    const setTrackIndex = (nextTrackIndex, animate = true) => {
+      if (!trackElement) return;
+      trackIndex = nextTrackIndex;
+      trackElement.classList.toggle("is-animating", animate);
+      trackElement.style.setProperty("--track-index", String(trackIndex));
+    };
 
-      const currentIndex = activeIndex;
-      const resolvedIndex = (nextIndex + slides.length) % slides.length;
-
-      if (resolvedIndex === currentIndex) return;
-
-      isAnimating = true;
-      activeIndex = resolvedIndex;
-      const currentSlide = slides[currentIndex];
-      const nextSlide = slides[resolvedIndex];
-      const enterClass = direction === "previous" ? "from-left" : "from-right";
-      const leaveClass = direction === "previous" ? "to-right" : "to-left";
+    const syncState = () => {
+      activeIndex = ((trackIndex - (hasLoopClones ? 1 : 0)) % realSlideCount + realSlideCount) % realSlideCount;
 
       slides.forEach((slide, index) => {
-        slide.classList.remove("is-active", "is-entering", "is-leaving", "from-right", "from-left", "to-right", "to-left");
-        slide.setAttribute("aria-hidden", index === resolvedIndex ? "false" : "true");
+        const realIndex = hasLoopClones
+          ? (index === 0 ? realSlideCount - 1 : index === slides.length - 1 ? 0 : index - 1)
+          : index;
+        slide.setAttribute("aria-hidden", realIndex === activeIndex ? "false" : "true");
       });
-
-      nextSlide.classList.add("is-entering", enterClass);
-      currentSlide.classList.add("is-active", "is-leaving", leaveClass);
-
-      window.requestAnimationFrame(() => {
-        nextSlide.classList.add("is-active");
-      });
-
-      window.setTimeout(() => {
-        currentSlide.classList.remove("is-active", "is-leaving", leaveClass);
-        nextSlide.classList.remove("is-entering", enterClass);
-        isAnimating = false;
-      }, 720);
 
       dots.forEach((dot, index) => {
-        dot.classList.toggle("is-active", index === resolvedIndex);
+        dot.classList.toggle("is-active", index === activeIndex);
       });
+    };
+
+    const moveToTrackIndex = (nextTrackIndex) => {
+      if (!slides.length || isAnimating) return;
+      isAnimating = true;
+      setTrackIndex(nextTrackIndex, true);
+      syncState();
     };
 
     const restartAutoplay = () => {
       window.clearInterval(intervalId);
-      intervalId = window.setInterval(() => showSlide(activeIndex + 1, "next"), 9000);
+      intervalId = window.setInterval(() => moveToTrackIndex(trackIndex + 1), 9000);
     };
 
+    trackElement?.addEventListener("transitionend", () => {
+      if (!hasLoopClones) {
+        isAnimating = false;
+        return;
+      }
+
+      if (trackIndex === 0) {
+        setTrackIndex(realSlideCount, false);
+      } else if (trackIndex === slides.length - 1) {
+        setTrackIndex(1, false);
+      }
+
+      syncState();
+      window.requestAnimationFrame(() => {
+        trackElement?.classList.add("is-animating");
+        isAnimating = false;
+      });
+    });
+
     previous?.addEventListener("click", () => {
-      showSlide(activeIndex - 1, "previous");
+      moveToTrackIndex(trackIndex - 1);
       restartAutoplay();
     });
 
     next?.addEventListener("click", () => {
-      showSlide(activeIndex + 1, "next");
+      moveToTrackIndex(trackIndex + 1);
       restartAutoplay();
     });
 
     dots.forEach((dot, index) => {
       dot.addEventListener("click", () => {
-        showSlide(index, index > activeIndex ? "next" : "previous");
+        moveToTrackIndex(hasLoopClones ? index + 1 : index);
         restartAutoplay();
       });
     });
 
+    syncState();
     restartAutoplay();
   }
 </script>

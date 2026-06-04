@@ -144,55 +144,23 @@ main {
   pointer-events: none;
 }
 
-.hero-slides,
-.hero-slide {
-  position: absolute;
-  inset: 0;
+.hero-track {
+  display: flex;
+  width: calc(var(--slide-count) * 100%);
+  height: 100%;
+  transform: translate3d(calc(var(--track-index) * -100% / var(--slide-count)), 0, 0);
+  will-change: transform;
+}
+
+.hero-track.is-animating {
+  transition: transform 0.52s ease-out;
 }
 
 .hero-slide {
+  position: relative;
   display: block;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateX(0);
-  transition: opacity 0.18s linear, transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: transform, opacity;
-}
-
-.hero-slide.is-active {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateX(0);
-}
-
-.hero-slide.from-right {
-  transform: translateX(100%);
-}
-
-.hero-slide.from-left {
-  transform: translateX(-100%);
-}
-
-.hero-slide.is-entering {
-  z-index: 1;
-  opacity: 1;
-}
-
-.hero-slide.is-entering.is-active {
-  transform: translateX(0);
-}
-
-.hero-slide.is-leaving {
-  z-index: 0;
-  opacity: 1;
-}
-
-.hero-slide.is-leaving.to-left {
-  transform: translateX(-100%);
-}
-
-.hero-slide.is-leaving.to-right {
-  transform: translateX(100%);
+  flex: 0 0 calc(100% / var(--slide-count));
+  height: 100%;
 }
 
 .hero-slide img {
