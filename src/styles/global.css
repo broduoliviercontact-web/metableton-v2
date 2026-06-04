@@ -154,14 +154,45 @@ main {
   display: block;
   opacity: 0;
   pointer-events: none;
-  transform: scale(1.012);
-  transition: opacity 0.6s ease, transform 0.8s ease;
+  transform: translateX(0);
+  transition: opacity 0.18s linear, transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
 }
 
 .hero-slide.is-active {
   opacity: 1;
   pointer-events: auto;
-  transform: scale(1);
+  transform: translateX(0);
+}
+
+.hero-slide.from-right {
+  transform: translateX(100%);
+}
+
+.hero-slide.from-left {
+  transform: translateX(-100%);
+}
+
+.hero-slide.is-entering {
+  z-index: 1;
+  opacity: 1;
+}
+
+.hero-slide.is-entering.is-active {
+  transform: translateX(0);
+}
+
+.hero-slide.is-leaving {
+  z-index: 0;
+  opacity: 1;
+}
+
+.hero-slide.is-leaving.to-left {
+  transform: translateX(-100%);
+}
+
+.hero-slide.is-leaving.to-right {
+  transform: translateX(100%);
 }
 
 .hero-slide img {
