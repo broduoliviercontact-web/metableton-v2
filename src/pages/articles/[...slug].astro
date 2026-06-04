@@ -2,6 +2,8 @@
 import { getCollection, render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import ArticleCard from "../../components/ArticleCard.astro";
+import { sections } from "../../data/sections";
 
 interface Props {
   article: CollectionEntry<"articles">;
@@ -17,24 +19,92 @@ export async function getStaticPaths() {
 
 const { article } = Astro.props as Props;
 const { Content } = await render(article);
+const section = sections.find((item) => item.slug === article.data.section);
+const relatedArticles = (await getCollection("articles", ({ data }) => !data.draft))
+  .filter((item) => item.id !== article.id && item.data.section === article.data.section)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
 ---
 
 <BaseLayout title={`${article.data.title} - METABLETON`} description={article.data.description}>
   <article class="article-page">
-    <header>
-      <p class="eyebrow">{article.data.section.replaceAll("-", " ")}</p>
-      <h1>{article.data.title}</h1>
-      <p>{article.data.description}</p>
-      <div class="meta-row">
-        <time datetime={article.data.date.toISOString()}>
-          {article.data.date.toLocaleDateString("fr-FR")}
-        </time>
-        <span>{article.data.author}</span>
+    <header class="article-hero">
+      {article.data.cover && (
+        <figure class="article-hero-media">
+          <img src={article.data.cover} alt={article.data.coverAlt ?? ""} />
+        </figure>
+      )}
+      <div class="article-hero-copy">
+        <p class="eyebrow">{section?.title ?? article.data.section.replaceAll("-", " ")}</p>
+        <h1>{article.data.title}</h1>
+        <p>{article.data.description}</p>
       </div>
-      {article.data.cover && <img src={article.data.cover} alt={article.data.coverAlt ?? ""} />}
     </header>
-    <div class="prose">
-      <Content />
+
+    <div class="article-body">
+      <aside class="article-aside" aria-label="Informations article">
+        <div>
+          <span>Publié</span>
+          <time datetime={article.data.date.toISOString()}>
+            {article.data.date.toLocaleDateString("fr-FR")}
+          </time>
+        </div>
+        <div>
+          <span>Auteur</span>
+          <strong>{article.data.author}</strong>
+        </div>
+        <div>
+          <span>Catégorie</span>
+          <a href={`/sections/${article.data.section}/`}>{section?.title ?? article.data.section}</a>
+        </div>
+        {article.data.tags.length > 0 && (
+          <div>
+            <span>Tags</span>
+            <ul>
+              {article.data.tags.map((tag) => <li>{tag}</li>)}
+            </ul>
+          </div>
+        )}
+      </aside>
+
+      <div class="prose">
+        <Content />
+      </div>
     </div>
+
+    <footer class="article-footer">
+      <div>
+        <p class="eyebrow">METABLETON</p>
+        <h2>Continuer l'exploration</h2>
+        <p>
+          Retrouve d'autres notes, guides et ressources autour d'Ableton Live,
+          Max for Live et des outils creatifs.
+        </p>
+      </div>
+      <a href={`/sections/${article.data.section}/`}>Voir la catégorie</a>
+    </footer>
+
+    {relatedArticles.length > 0 && (
+      <section class="related-articles" aria-label="Articles liés">
+        <div class="section-heading">
+          <p class="eyebrow">Même famille</p>
+          <h2>Articles liés</h2>
+        </div>
+        <div class="article-list">
+          {relatedArticles.map((item) => (
+            <ArticleCard
+              title={item.data.title}
+              description={item.data.description}
+              href={`/articles/${item.slug}/`}
+              date={item.data.date}
+              section={item.data.section}
+              tags={item.data.tags}
+              cover={item.data.cover}
+              coverAlt={item.data.coverAlt}
+            />
+          ))}
+        </div>
+      </section>
+    )}
   </article>
 </BaseLayout>
