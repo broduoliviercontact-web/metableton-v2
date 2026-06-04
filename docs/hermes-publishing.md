@@ -19,6 +19,14 @@ The profile is configured with:
 - role: publication only
 - Telegram topic: `https://t.me/c/3847128759/8632`
 
+Forge should route approved `blog-first` content to MetaPoster:
+
+```text
+Sun -> Forge -> Quill -> Lens -> MetaPoster
+```
+
+Signal remains the handoff for social distribution, scheduling, and reporting after the blog post exists.
+
 Before publishing, Hermès must run:
 
 ```bash

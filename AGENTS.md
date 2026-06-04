@@ -15,9 +15,18 @@ This repository is the canonical METABLETON V2 site.
 - Quill writes publishable drafts.
 - Lens handles visuals.
 - Forge shapes editorial angles.
-- Signal / the `metaposter` Hermes profile publishes approved content.
+- MetaPoster / the `metaposter` Hermes profile publishes approved blog content.
+- Signal handles social distribution, scheduling, and reporting after blog publication.
 
-Only Signal / `metaposter` should push publication changes.
+Only MetaPoster / `metaposter` should push blog publication changes.
+
+Forge routing for blog-first content:
+
+```text
+Sun -> Forge -> Quill -> Lens -> MetaPoster
+```
+
+Signal can take over after publication for social follow-up.
 
 ## Telegram Topic
 
