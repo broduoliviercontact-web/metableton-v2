@@ -1,0 +1,44 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ArticleCard from "../../components/ArticleCard.astro";
+import { sections } from "../../data/sections";
+import { getPublishedArticles } from "../../lib/articles";
+
+export function getStaticPaths() {
+  return sections.map((section) => ({
+    params: { slug: section.slug },
+    props: { section },
+  }));
+}
+
+const { section } = Astro.props;
+const articles = (await getPublishedArticles()).filter(
+  (article) => article.data.section === section.slug
+);
+---
+
+<BaseLayout title={`${section.title} - METABLETON`} description={section.description}>
+  <section class="page-header">
+    <p class="eyebrow">Rubrique</p>
+    <h1>{section.title}</h1>
+    <p>{section.description}</p>
+  </section>
+  <section class="article-list">
+    {articles.length ? (
+      articles.map((article) => (
+        <ArticleCard
+          title={article.data.title}
+          description={article.data.description}
+          href={`/articles/${article.slug}/`}
+          date={article.data.date}
+          section={article.data.section}
+          tags={article.data.tags}
+          cover={article.data.cover}
+          coverAlt={article.data.coverAlt}
+        />
+      ))
+    ) : (
+      <p class="empty-state">Aucun article publie dans cette rubrique pour l'instant.</p>
+    )}
+  </section>
+</BaseLayout>

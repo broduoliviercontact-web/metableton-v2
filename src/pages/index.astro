@@ -1,0 +1,73 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import { sections } from "../data/sections";
+import { getFeaturedArticles, getPublishedArticles } from "../lib/articles";
+
+const featured = await getFeaturedArticles();
+const articles = await getPublishedArticles();
+const hero = featured[0] ?? articles[0];
+const latest = articles.filter((article) => article.id !== hero?.id).slice(0, 6);
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Ableton Live / Max for Live / Ressources</p>
+      <h1>METABLETON</h1>
+      <p>
+        Un site editorial sobre pour documenter les pratiques Ableton, les devices,
+        les freebies et les workflows agents. Peu de bruit, beaucoup de contexte.
+      </p>
+      <div class="button-row">
+        <a class="button" href="/articles/">Lire les articles</a>
+        <a class="button ghost" href="/agents/">Workflow agents</a>
+      </div>
+    </div>
+    {hero && (
+      <a class="hero-feature" href={`/articles/${hero.slug}/`}>
+        {hero.data.cover && <img src={hero.data.cover} alt={hero.data.coverAlt ?? ""} />}
+        <div class="hero-feature-caption">
+          <span>{hero.data.section.replaceAll("-", " ")}</span>
+          <strong>{hero.data.title}</strong>
+        </div>
+      </a>
+    )}
+  </section>
+
+  <section class="section-band">
+    <div class="section-heading">
+      <p class="eyebrow">Rubriques</p>
+      <h2>Rubriques simples, publication directe.</h2>
+    </div>
+    <div class="section-grid">
+      {sections.map((section) => (
+        <a class="section-link" href={`/sections/${section.slug}/`}>
+          <h3>{section.title}</h3>
+          <p>{section.description}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-band">
+    <div class="section-heading">
+      <p class="eyebrow">Dernieres publications</p>
+      <h2>Selection editoriale</h2>
+    </div>
+    <div class="article-list">
+      {latest.map((article) => (
+        <ArticleCard
+          title={article.data.title}
+          description={article.data.description}
+          href={`/articles/${article.slug}/`}
+          date={article.data.date}
+          section={article.data.section}
+          tags={article.data.tags}
+          cover={article.data.cover}
+          coverAlt={article.data.coverAlt}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

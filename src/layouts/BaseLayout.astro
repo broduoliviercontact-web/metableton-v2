@@ -1,0 +1,54 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "METABLETON",
+  description = "Blog francophone Ableton Live, Max for Live, production musicale et outils creatifs.",
+} = Astro.props;
+
+const primaryNav = [
+  ["Max for Live", "/sections/max-for-live/"],
+  ["Ableton Guides", "/sections/guides-ableton-live/"],
+  ["Blog / News", "/sections/blog-news/"],
+  ["Download Packs", "/sections/freebies/"],
+];
+
+const secondaryNav = [
+  ["All Articles", "/articles/"],
+  ["Agents", "/agents/"],
+  ["Admin CMS", "/admin/"],
+];
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="site-shell">
+      <aside class="site-sidebar">
+        <a class="brand" href="/" aria-label="Accueil METABLETON">
+          <img src="/logos/metableton-symbol.svg" alt="" />
+        </a>
+        <nav class="primary-nav" aria-label="Navigation principale">
+          {primaryNav.map(([label, href]) => <a href={href}>{label}</a>)}
+        </nav>
+        <nav class="secondary-nav" aria-label="Navigation secondaire">
+          {secondaryNav.map(([label, href]) => <a href={href}>{label}</a>)}
+        </nav>
+      </aside>
+      <main>
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ArticleCard from "../../components/ArticleCard.astro";
+import { getPublishedArticles } from "../../lib/articles";
+
+const articles = await getPublishedArticles();
+---
+
+<BaseLayout title="Articles - METABLETON">
+  <section class="page-header">
+    <p class="eyebrow">Archive</p>
+    <h1>Tous les articles</h1>
+    <p>La bibliotheque editoriale METABLETON, classee du plus recent au plus ancien.</p>
+  </section>
+  <section class="article-list">
+    {articles.map((article) => (
+      <ArticleCard
+        title={article.data.title}
+        description={article.data.description}
+        href={`/articles/${article.slug}/`}
+        date={article.data.date}
+        section={article.data.section}
+        tags={article.data.tags}
+        cover={article.data.cover}
+        coverAlt={article.data.coverAlt}
+      />
+    ))}
+  </section>
+</BaseLayout>

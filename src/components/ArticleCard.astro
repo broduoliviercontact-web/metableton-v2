@@ -1,0 +1,31 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  href: string;
+  date: Date;
+  section: string;
+  tags?: string[];
+  cover?: string;
+  coverAlt?: string;
+}
+
+const { title, description, href, date, section, tags = [], cover, coverAlt = "" } = Astro.props;
+---
+
+<article class="article-card">
+  {cover && (
+    <a class="article-card-media" href={href} aria-label={title}>
+      <img src={cover} alt={coverAlt} loading="lazy" />
+    </a>
+  )}
+  <div>
+    <p class="eyebrow">{section.replaceAll("-", " ")}</p>
+    <h2><a href={href}>{title}</a></h2>
+    <p>{description}</p>
+    <div class="meta-row">
+      <time datetime={date.toISOString()}>{date.toLocaleDateString("fr-FR")}</time>
+      {tags.slice(0, 3).map((tag) => <span>{tag}</span>)}
+    </div>
+  </div>
+</article>

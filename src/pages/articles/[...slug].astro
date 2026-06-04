@@ -1,0 +1,40 @@
+---
+import { getCollection, render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+interface Props {
+  article: CollectionEntry<"articles">;
+}
+
+export async function getStaticPaths() {
+  const articles = await getCollection("articles", ({ data }) => !data.draft);
+  return articles.map((article) => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props as Props;
+const { Content } = await render(article);
+---
+
+<BaseLayout title={`${article.data.title} - METABLETON`} description={article.data.description}>
+  <article class="article-page">
+    <header>
+      <p class="eyebrow">{article.data.section.replaceAll("-", " ")}</p>
+      <h1>{article.data.title}</h1>
+      <p>{article.data.description}</p>
+      <div class="meta-row">
+        <time datetime={article.data.date.toISOString()}>
+          {article.data.date.toLocaleDateString("fr-FR")}
+        </time>
+        <span>{article.data.author}</span>
+      </div>
+      {article.data.cover && <img src={article.data.cover} alt={article.data.coverAlt ?? ""} />}
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
