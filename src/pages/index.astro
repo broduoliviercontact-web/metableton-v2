@@ -12,18 +12,6 @@ const latest = articles.filter((article) => article.id !== hero?.id).slice(0, 6)
 
 <BaseLayout>
   <section class="hero">
-    <div class="hero-copy">
-      <p class="eyebrow">Ableton Live / Max for Live / Ressources</p>
-      <h1>METABLETON</h1>
-      <p>
-        Un site editorial sobre pour documenter les pratiques Ableton, les devices,
-        les freebies et les workflows agents. Peu de bruit, beaucoup de contexte.
-      </p>
-      <div class="button-row">
-        <a class="button" href="/articles/">Lire les articles</a>
-        <a class="button ghost" href="/agents/">Workflow agents</a>
-      </div>
-    </div>
     {hero && (
       <a class="hero-feature" href={`/articles/${hero.slug}/`}>
         {hero.data.cover && <img src={hero.data.cover} alt={hero.data.coverAlt ?? ""} />}
