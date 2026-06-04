@@ -3,6 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import ArticleCard from "../../components/ArticleCard.astro";
 import { sections } from "../../data/sections";
 import { getPublishedArticles } from "../../lib/articles";
+import timelineData from "../../data/ableton-timeline.json";
 
 export function getStaticPaths() {
   return sections.map((section) => ({
@@ -15,6 +16,10 @@ const { section } = Astro.props;
 const articles = (await getPublishedArticles()).filter(
   (article) => article.data.section === section.slug
 );
+const timelineItems = [
+  ...((timelineData as any).timelineVersions ?? []),
+  ...((timelineData as any).hardwareTimeline ?? []),
+].sort((a, b) => String(a.date ?? a.startDate ?? "").localeCompare(String(b.date ?? b.startDate ?? "")));
 ---
 
 <BaseLayout title={`${section.title} - METABLETON`} description={section.description}>
@@ -23,8 +28,22 @@ const articles = (await getPublishedArticles()).filter(
     <h1>{section.title}</h1>
     <p>{section.description}</p>
   </section>
-  <section class="article-list">
-    {articles.length ? (
+  {section.slug === "ableton-timeline" ? (
+    <section class="timeline-list">
+      {timelineItems.map((item) => (
+        <article class="timeline-item">
+          <time>{item.date ?? item.startDate ?? "Date inconnue"}</time>
+          <div>
+            <h2>{item.label ?? item.name ?? item.id}</h2>
+            {item.summary && <p>{item.summary}</p>}
+            {item.coverImage && <img src={item.coverImage} alt={item.label ?? item.name ?? ""} loading="lazy" />}
+          </div>
+        </article>
+      ))}
+    </section>
+  ) : (
+    <section class="article-list">
+      {articles.length ? (
       articles.map((article) => (
         <ArticleCard
           title={article.data.title}
@@ -40,5 +59,6 @@ const articles = (await getPublishedArticles()).filter(
     ) : (
       <p class="empty-state">Aucun article publie dans cette rubrique pour l'instant.</p>
     )}
-  </section>
+    </section>
+  )}
 </BaseLayout>

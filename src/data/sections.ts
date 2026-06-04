@@ -25,7 +25,7 @@ export const sections = [
   },
   {
     slug: "ableton-timeline",
-    title: "Ableton Timeline",
+    title: "ABLETON TIMELINE",
     description:
       "Une lecture chronologique de l'ecosysteme Ableton : Live, Push, Move, Max for Live et grandes versions.",
   },

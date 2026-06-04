@@ -1,0 +1,161 @@
+---
+title: "Construire un contrôleur MIDI DIY pour moins de 15€"
+description: "Guide complet pour construire un contrôleur MIDI 8 potentiomètres + 8 boutons avec Arduino Pro Micro et la library Control Surface. Plug & play avec Ableton Live."
+date: "2026-04-28"
+author: "METABLETON"
+section: "blog-news"
+tags: ["arduino","midi","diy","ableton","controller","hardware","pro-micro","control-surface"]
+cover: "/articles/blog-news/controleur-midi-diy/header.jpg"
+coverAlt: "Contrôleur MIDI DIY Arduino Pro Micro avec potentiomètres et boutons sur breadboard"
+featured: true
+draft: false
+---
+
+Tu en as marre des boutons virtuels ? Voici comment construire ton propre contrôleur physique pour Ableton Live, même si tu n'as jamais touché un fer à souder.
+
+## Pourquoi faire soi-même un contrôleur MIDI ?
+
+Tu passes tes journées à tordre des knobs virtuels avec ta souris. C'est précis, certes, mais c'est lent, peu intuitif, et surtout — ça ne sonne pas 'live'. Un contrôleur physique, c'est du hardware : tu touches, tu entends, tu réagis. C'est une autre relation à la musique.
+
+Le problème, c'est le prix. Un contrôleur MIDI neuf, c'est facilement 80€, 150€, 300€. Pour un bout de plastique avec huit potentiomètres et quelques boutons, ça pique.
+
+Alors voici la bonne nouvelle : tu peux construire le tien pour moins de 15€ de matériel, sans expertise en électronique, avec du code si simple qu'un enfant de 12 ans pourrait le comprendre.
+
+<blockquote class="article-quote">
+Pas de bluff. Pas de bidouille obscur. Juste un microcontrôleur, quelques composants basiques, et une librairie qui fait tout le travail technique pour toi.
+</blockquote>
+
+## Ce qu'il faut savoir avant de commencer
+
+## Ton niveau
+
+Tu n'as pas besoin d'être ingénieur. Si tu sais brancher un câble USB, lire un diagramme simple, et copier-coller du code dans un logiciel — alors tu as déjà le niveau requis.
+
+## Ton budget
+
+• ~10€ : Contrôleur de base (4-8 pots + boutons)
+• 10-15€ : Version complète avec boîtier
+• 20-30€ : Avec LEDs, écran OLED, finition pro
+
+## Ton temps
+
+- Premier montage : 30 minutes sur breadboard (pas de soudure)
+- Premier contrôleur fonctionnel : 1-2 heures
+- Version finie dans un boîtier : une demi-journée
+
+<aside class="article-callout">
+<strong>Pièges à éviter</strong>
+<p>• Clones Arduino de qualité variable : certains ont un bootloader défectueux. Achète chez un vendeur avec des avis récents et positifs.<br />• Le voltage : certains clones envoient 3.3V au lieu de 5V — vérifie la spécification.<br />• La soudure : ce n'est pas obligatoire au début, mais si tu en fais, investis dans un fer à souder à température réglable (~15€).</p>
+</aside>
+
+## La solution recommandée : Arduino Pro Micro + Control Surface
+
+## L'Arduino Pro Micro (ATmega32U4)
+
+Ce n'est pas le plus connu des Arduino, mais c'est le plus pratique pour le MIDI : USB-MIDI natif (pas besoin de logiciel intermédiaire), plug & play avec Ableton Live, petit format idéal pour intégrer dans un boîtier custom, et prix ridicule (3-5€ le clone).
+
+## La librairie Control Surface (par tttapa)
+
+C'est le cœur magique de l'opération. Une librairie Arduino qui gère tout le protocole MIDI pour toi. Syntaxe ultra-simple : 1 ligne pour déclarer un potentiomètre, 1 ligne pour dire qu'il envoie du MIDI CC, 1 ligne pour l'initialiser.
+
+## La liste du matériel exact
+
+- Arduino Pro Micro (ATmega32U4) clone : 3-5€
+- Potentiomètres linéaires 10kΩ x8 : 1-2€
+- Boutons poussoirs + capuchons x8 : 1-2€
+- Breadboard 400 points : 1-2€
+- Câbles jumper mâle-mâle x20+ : ~1€
+- TOTAL : ~7-12€
+
+## Le code : 5 lignes = 1 pot MIDI
+
+Voici à quoi ressemble le code pour un contrôleur avec 1 potentiomètre qui contrôle un paramètre MIDI :
+
+```js
+#include <Control_Surface.h>
+
+CCPotentiometer potentiometer(A0, MIDI_CC::Modulation_Wheel_1);
+
+void setup() { Control_Surface.begin(); }
+void loop()  { Control_Surface.loop(); }
+```
+
+C'est tout. Tu uploades ce code, tu branches un potentiomètre sur A0, tu tournes le bouton, et Ableton reçoit du MIDI.
+
+## Un contrôleur complet : 8 potentiomètres + 8 boutons
+
+Pour aller plus loin, voici le code complet d'un contrôleur 8x8 avec multiplexer 74HC4051 :
+
+```js
+#include <Control_Surface.h>
+
+// Multiplexer 74HC4051
+CD74HC4051 mux { A0, {3, 4, 5} };
+
+// 8 potentiomètres MIDI (CC 1-8)
+CCPotentiometer potentiometers[] {
+  { mux.pin(0), {MIDI_CC::Modulation_Wheel_1, CHANNEL_1} },
+  { mux.pin(1), {MIDI_CC::Breath_Controller, CHANNEL_1} },
+  { mux.pin(2), {MIDI_CC::Foot_Controller, CHANNEL_1} },
+  { mux.pin(3), {MIDI_CC::Portamento_Time, CHANNEL_1} },
+  { mux.pin(4), {MIDI_CC::Data_Entry_MSB, CHANNEL_1} },
+  { mux.pin(5), {MIDI_CC::Channel_Volume, CHANNEL_1} },
+  { mux.pin(6), {MIDI_CC::Balance, CHANNEL_1} },
+  { mux.pin(7), {MIDI_CC::Pan, CHANNEL_1} },
+};
+
+// 8 boutons MIDI (Notes 36-43)
+NoteButton buttons[] {
+  { 6,  {MIDI_Notes::C_2,  CHANNEL_1} },
+  { 7,  {MIDI_Notes::Db_2, CHANNEL_1} },
+  { 8,  {MIDI_Notes::D_2,  CHANNEL_1} },
+  { 9,  {MIDI_Notes::Eb_2, CHANNEL_1} },
+  { 10, {MIDI_Notes::E_2,  CHANNEL_1} },
+  { 14, {MIDI_Notes::F_2,  CHANNEL_1} },
+  { 15, {MIDI_Notes::Gb_2, CHANNEL_1} },
+  { 16, {MIDI_Notes::G_2,  CHANNEL_1} },
+};
+
+void setup() {
+  Control_Surface.begin();
+}
+
+void loop() {
+  Control_Surface.loop();
+}
+```
+
+<figure class="article-figure">
+<img src="/articles/blog-news/controleur-midi-diy/schema.jpg" alt="Schéma de câblage Arduino Pro Micro + 74HC4051 + 8 potentiomètres" />
+<figcaption>Schéma de câblage complet — clique pour agrandir</figcaption>
+</figure>
+
+## Alternatives rapides
+
+• Raspberry Pi Pico (~9-13€) : plus de puissance, plus de GPIO, Bluetooth LE possible. Même library Control Surface.
+• Arduino Nano + Hairless (~7-10€) : moins cher mais nécessite un pont logiciel. Moins plug & play.
+
+## Prochaines étapes
+
+- Imprimer un boîtier 3D (fichier STL ~2-5€ de filament)
+- Ajouter des LEDs pour le feedback visuel
+- Intégrer un écran OLED pour afficher les noms de paramètres
+- Passer au Bluetooth LE avec un Raspberry Pi Pico W
+- Créer des mappings MIDI personnalisés pour tes projets
+
+## Ressources
+
+• Library Control Surface : [GitHub](https://github.com/tttapa/Control-Surface)
+• Documentation officielle : [Getting Started](https://tttapa.github.io/Control-Surface/Doxygen/d5/d7d/md_pages_Getting-Started.html)
+• Tutoriels vidéo : chaîne YouTube 'musiconerd' de Gustavo Silveira
+
+<aside class="article-callout">
+<strong>Télécharge le code</strong>
+<p>Le sketch Arduino complet + README technique est disponible en téléchargement. Le fichier .ino est prêt à flasher sur ton Pro Micro.</p>
+</aside>
+
+## Conclusion
+
+Construire ton propre contrôleur MIDI, c'est reprendre le pouvoir sur ton setup. C'est comprendre comment ça marche, c'est personnaliser chaque bouton pour qu'il fasse exactement ce que tu veux, et c'est le faire pour le prix d'un burger menu.
+
+Tu as un Arduino qui traîne dans un tiroir ? Transforme-le. Tu n'en as pas ? Commande-le aujourd'hui, monte-le ce week-end, joue avec lundi.

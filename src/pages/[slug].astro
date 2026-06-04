@@ -1,0 +1,50 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { secondaryPages } from "../data/secondary-pages";
+
+export function getStaticPaths() {
+  return secondaryPages.map((page) => ({
+    params: { slug: page.slug },
+    props: { page },
+  }));
+}
+
+const { page } = Astro.props as unknown as {
+  page: {
+    title: string;
+    intro: string;
+    panels?: readonly { title: string; text: string }[];
+    links?: readonly { label: string; value: string; href: string }[];
+  };
+};
+---
+
+<BaseLayout title={`${page.title} - METABLETON`} description={page.intro}>
+  <section class="page-header">
+    <p class="eyebrow">METABLETON</p>
+    <h1>{page.title}</h1>
+    <p>{page.intro}</p>
+  </section>
+
+  {page.panels && (
+    <section class="panel-grid">
+      {page.panels.map((panel) => (
+        <article class="info-panel">
+          <h2>{panel.title}</h2>
+          <p>{panel.text}</p>
+        </article>
+      ))}
+    </section>
+  )}
+
+  {page.links && (
+    <section class="link-list">
+      {page.links.map((link) => (
+        <a href={link.href}>
+          <span>{link.label}</span>
+          <strong>{link.value}</strong>
+        </a>
+      ))}
+    </section>
+  )}
+</BaseLayout>
