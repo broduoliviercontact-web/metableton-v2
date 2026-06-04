@@ -27,7 +27,7 @@ const relatedArticles = (await getCollection("articles", ({ data }) => !data.dra
 ---
 
 <BaseLayout title={`${article.data.title} - METABLETON`} description={article.data.description}>
-  <article class="article-page">
+  <article class={`article-page article-section-${article.data.section}`}>
     <header class="article-hero">
       {article.data.cover && (
         <figure class="article-hero-media">
@@ -42,47 +42,35 @@ const relatedArticles = (await getCollection("articles", ({ data }) => !data.dra
     </header>
 
     <div class="article-body">
-      <aside class="article-aside" aria-label="Informations article">
-        <div>
-          <span>Publié</span>
-          <time datetime={article.data.date.toISOString()}>
-            {article.data.date.toLocaleDateString("fr-FR")}
-          </time>
-        </div>
-        <div>
-          <span>Auteur</span>
-          <strong>{article.data.author}</strong>
-        </div>
-        <div>
-          <span>Catégorie</span>
-          <a href={`/sections/${article.data.section}/`}>{section?.title ?? article.data.section}</a>
-        </div>
-        {article.data.tags.length > 0 && (
-          <div>
-            <span>Tags</span>
-            <ul>
-              {article.data.tags.map((tag) => <li>{tag}</li>)}
-            </ul>
-          </div>
-        )}
-      </aside>
-
       <div class="prose">
         <Content />
       </div>
     </div>
 
-    <footer class="article-footer">
+    <aside class="article-aside article-aside-bottom" aria-label="Informations article">
       <div>
-        <p class="eyebrow">METABLETON</p>
-        <h2>Continuer l'exploration</h2>
-        <p>
-          Retrouve d'autres notes, guides et ressources autour d'Ableton Live,
-          Max for Live et des outils creatifs.
-        </p>
+        <span>Publié</span>
+        <time datetime={article.data.date.toISOString()}>
+          {article.data.date.toLocaleDateString("fr-FR")}
+        </time>
       </div>
-      <a href={`/sections/${article.data.section}/`}>Voir la catégorie</a>
-    </footer>
+      <div>
+        <span>Auteur</span>
+        <strong>{article.data.author}</strong>
+      </div>
+      <div>
+        <span>Catégorie</span>
+        <a href={`/sections/${article.data.section}/`}>{section?.title ?? article.data.section}</a>
+      </div>
+      {article.data.tags.length > 0 && (
+        <div>
+          <span>Tags</span>
+          <ul>
+            {article.data.tags.map((tag) => <li>{tag}</li>)}
+          </ul>
+        </div>
+      )}
+    </aside>
 
     {relatedArticles.length > 0 && (
       <section class="related-articles" aria-label="Articles liés">

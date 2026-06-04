@@ -395,15 +395,92 @@ main {
 }
 
 .article-page {
+  --article-glow-a: rgba(255, 232, 167, 0.34);
+  --article-glow-b: rgba(255, 255, 255, 0.52);
+  --article-glow-c: rgba(233, 222, 205, 0.44);
+  --article-wash-start: rgba(255, 255, 255, 0.26);
+  --article-wash-end: rgba(255, 255, 255, 0.08);
+  --article-line-color: rgba(23, 23, 23, 0.028);
+  --article-line-size: 120px;
+  position: relative;
   max-width: 1180px;
   margin: 0 auto;
   padding: 0 0 64px;
+  isolation: isolate;
+}
+
+.article-section-max-for-live {
+  --article-glow-a: rgba(255, 221, 92, 0.24);
+  --article-glow-b: rgba(255, 244, 191, 0.42);
+  --article-glow-c: rgba(220, 195, 133, 0.28);
+  --article-wash-start: rgba(255, 241, 188, 0.22);
+  --article-wash-end: rgba(255, 255, 255, 0.07);
+  --article-line-color: rgba(96, 75, 23, 0.032);
+}
+
+.article-section-blog-news {
+  --article-glow-a: rgba(199, 214, 229, 0.30);
+  --article-glow-b: rgba(242, 247, 250, 0.52);
+  --article-glow-c: rgba(176, 193, 210, 0.22);
+  --article-wash-start: rgba(223, 232, 239, 0.26);
+  --article-wash-end: rgba(255, 255, 255, 0.06);
+  --article-line-color: rgba(38, 58, 78, 0.030);
+}
+
+.article-section-freebies {
+  --article-glow-a: rgba(255, 229, 188, 0.34);
+  --article-glow-b: rgba(255, 250, 235, 0.54);
+  --article-glow-c: rgba(232, 202, 158, 0.30);
+  --article-wash-start: rgba(255, 246, 226, 0.30);
+  --article-wash-end: rgba(255, 255, 255, 0.08);
+  --article-line-color: rgba(115, 83, 42, 0.026);
+}
+
+.article-section-ableton-timeline {
+  --article-glow-a: rgba(226, 217, 196, 0.28);
+  --article-glow-b: rgba(255, 252, 239, 0.40);
+  --article-glow-c: rgba(191, 180, 156, 0.24);
+  --article-wash-start: rgba(238, 231, 215, 0.26);
+  --article-wash-end: rgba(255, 255, 255, 0.05);
+  --article-line-color: rgba(69, 58, 42, 0.040);
+  --article-line-size: 72px;
+}
+
+.article-section-guides-ableton-live {
+  --article-glow-a: rgba(211, 222, 214, 0.28);
+  --article-glow-b: rgba(250, 252, 247, 0.48);
+  --article-glow-c: rgba(199, 207, 190, 0.22);
+  --article-wash-start: rgba(236, 241, 231, 0.22);
+  --article-wash-end: rgba(255, 255, 255, 0.06);
+  --article-line-color: rgba(53, 71, 48, 0.026);
+}
+
+.article-page::before {
+  content: "";
+  position: absolute;
+  inset: 180px 12px 0;
+  z-index: -1;
+  border-radius: 36px;
+  background:
+    radial-gradient(circle at 18% 22%, var(--article-glow-a), transparent 0 24rem),
+    radial-gradient(circle at 78% 18%, var(--article-glow-b), transparent 0 18rem),
+    radial-gradient(circle at 64% 64%, var(--article-glow-c), transparent 0 20rem),
+    linear-gradient(180deg, var(--article-wash-start), var(--article-wash-end)),
+    repeating-linear-gradient(
+      90deg,
+      var(--article-line-color) 0,
+      var(--article-line-color) 1px,
+      transparent 1px,
+      transparent var(--article-line-size)
+    );
+  opacity: 0.88;
+  pointer-events: none;
 }
 
 .article-hero {
   display: grid;
   gap: 28px;
-  padding: 0 0 44px;
+  padding: 0 22px 44px;
   border-bottom: 1px solid var(--border-soft);
 }
 
@@ -427,7 +504,9 @@ main {
 .article-hero-copy {
   display: grid;
   gap: 18px;
-  max-width: 920px;
+  max-width: 1040px;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .article-page h1 {
@@ -442,35 +521,40 @@ main {
 
 .article-hero-copy > p:last-child {
   max-width: 740px;
-  margin: 0;
+  margin: 0 auto;
   color: var(--text-secondary);
   font-size: clamp(1.08rem, 1.6vw, 1.32rem);
   line-height: 1.55;
 }
 
 .article-body {
-  display: grid;
-  grid-template-columns: 220px minmax(0, 720px);
-  gap: 56px;
-  align-items: start;
-  max-width: 1040px;
+  max-width: 760px;
   margin: 48px auto 0;
+  padding: 0 22px;
 }
 
 .article-aside {
-  position: sticky;
-  top: 28px;
   display: grid;
   gap: 20px;
-  padding-top: 3px;
+  text-align: left;
+  align-content: start;
   color: var(--text-secondary);
   font-size: 0.88rem;
   line-height: 1.45;
 }
 
+.article-aside-bottom {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  max-width: 1040px;
+  margin: 40px auto 0;
+  padding: 0 22px;
+}
+
 .article-aside div {
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--border-soft);
+  min-width: 0;
+  padding: 16px 0;
+  border-top: 1px solid var(--border-soft);
 }
 
 .article-aside span {
@@ -648,49 +732,9 @@ main {
   font-weight: 700;
 }
 
-.article-footer {
-  display: flex;
-  gap: 28px;
-  align-items: end;
-  justify-content: space-between;
-  max-width: 1040px;
-  margin: 64px auto 0;
-  padding: 28px;
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius-card);
-  background: var(--panel-bg);
-}
-
-.article-footer h2 {
-  margin: 0 0 10px;
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 3.4rem);
-  font-weight: 500;
-  line-height: 0.95;
-  letter-spacing: -0.045em;
-}
-
-.article-footer p:last-child {
-  max-width: 620px;
-  margin: 0;
-  color: var(--text-secondary);
-}
-
-.article-footer > a {
-  flex: 0 0 auto;
-  padding: 12px 16px;
-  border: 1px solid var(--text-primary);
-  border-radius: var(--radius-card);
-  background: var(--text-primary);
-  color: #ffffff;
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .related-articles {
   margin-top: 56px;
+  padding: 0 22px;
 }
 
 .workflow {
@@ -873,15 +917,17 @@ pre {
   }
 
   .article-body {
-    grid-template-columns: 1fr;
-    gap: 30px;
     margin-top: 34px;
   }
 
   .article-aside {
-    position: static;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 14px;
+  }
+
+  .article-aside-bottom {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 34px;
   }
 
   .article-aside div {
@@ -889,11 +935,6 @@ pre {
     border: 1px solid var(--border-soft);
     border-radius: var(--radius-card);
     background: rgba(255, 255, 255, 0.34);
-  }
-
-  .article-footer {
-    display: grid;
-    align-items: start;
   }
 
   .panel-grid {
@@ -942,8 +983,15 @@ pre {
     padding-bottom: 48px;
   }
 
+  .article-page::before {
+    inset: 140px 0 0;
+    border-radius: 24px;
+  }
+
   .article-hero {
     gap: 22px;
+    padding-right: 0;
+    padding-left: 0;
     padding-bottom: 32px;
   }
 
@@ -958,10 +1006,18 @@ pre {
 
   .article-body {
     margin-top: 28px;
+    padding-right: 0;
+    padding-left: 0;
   }
 
   .article-aside {
     grid-template-columns: 1fr;
+  }
+
+  .article-aside-bottom {
+    margin-top: 28px;
+    padding-right: 0;
+    padding-left: 0;
   }
 
   .prose {
@@ -973,8 +1029,8 @@ pre {
     font-size: clamp(2rem, 12vw, 3.1rem);
   }
 
-  .article-footer {
-    margin-top: 44px;
-    padding: 20px;
+  .related-articles {
+    padding-right: 0;
+    padding-left: 0;
   }
 }
