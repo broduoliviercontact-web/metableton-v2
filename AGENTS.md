@@ -15,9 +15,19 @@ This repository is the canonical METABLETON V2 site.
 - Quill writes publishable drafts.
 - Lens handles visuals.
 - Forge shapes editorial angles.
-- Signal / the `metableton` Hermes profile publishes approved content.
+- Signal / the `metaposter` Hermes profile publishes approved content.
 
-Only Signal / `metableton` should push publication changes.
+Only Signal / `metaposter` should push publication changes.
+
+## Telegram Topic
+
+MetaPoster's Telegram topic is:
+
+```text
+https://t.me/c/3847128759/8632
+```
+
+Use this topic for publication requests, approvals, and short publication reports.
 
 ## Approval Rule
 
