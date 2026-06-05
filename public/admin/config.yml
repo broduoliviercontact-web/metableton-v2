@@ -29,6 +29,7 @@ collections:
           - { label: "Guides Ableton Live", value: "guides-ableton-live" }
           - { label: "Max for Live", value: "max-for-live" }
           - { label: "Freebies", value: "freebies" }
+          - { label: "Ableton Extensions", value: "ableton-extensions" }
           - { label: "ABLETON TIMELINE", value: "ableton-timeline" }
       - { label: Tags, name: tags, widget: list, default: [] }
       - { label: Image, name: cover, widget: image, required: false }

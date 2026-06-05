@@ -14,6 +14,7 @@ const articles = defineCollection({
       "max-for-live",
       "freebies",
       "ableton-timeline",
+      "ableton-extensions",
     ]),
     tags: z.array(z.string()).default([]),
     cover: z.string().optional(),

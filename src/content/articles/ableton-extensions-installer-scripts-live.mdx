@@ -1,0 +1,61 @@
+---
+title: "Ableton Extensions : comment installer et faire marcher les scripts dans Live"
+description: "Guide simple pour installer, activer et lancer les nouvelles Ableton Extensions dans Live 12 Suite beta."
+date: "2026-06-05"
+author: "METABLETON"
+section: "ableton-extensions"
+tags: ["ableton extensions","sdk","installation","live 12 suite beta","tutoriel"]
+cover: "/articles/ableton-extensions/tutorial-installation/header.png"
+coverAlt: "Capture d'une extension Ableton dans Live"
+featured: true
+draft: false
+---
+
+Ableton a ouvert son **Extensions SDK** en beta publique le **2 juin 2026**. D'apres la doc officielle, les Extensions ne fonctionnent pour le moment que dans **Live 12 Suite beta 12.4.5 ou plus recent**, pas dans Standard, Intro ou Lite.
+
+L'idee est simple : une extension est un petit outil en JavaScript ou TypeScript qui se lance depuis le **menu clic droit** dans Live. Ce n'est pas Max for Live. Ici, on agit plutot sur la structure du Set, les clips, les pistes, les notes, l'arrangement ou des automatisations de workflow.
+
+## Ce qu'il faut avant de commencer
+
+Pour tester une extension, il te faut :
+
+1. **Ableton Live 12 Suite beta 12.4.5 ou plus recent**
+2. L'acces au **programme beta Ableton**
+3. Une extension au format **.ablx**
+
+Les liens utiles :
+
+- [Article officiel Ableton sur l'Extensions SDK](https://www.ableton.com/en/blog/introducing-extensions-sdk/)
+- [Documentation officielle du SDK](https://ableton.github.io/extensions-sdk/)
+- [Repo d'exemples de Federico Pepe](https://github.com/federico-pepe/ableton-live-extensions)
+
+## Comment installer une extension
+
+Le flow general est le suivant :
+
+1. Rejoins la beta Ableton et installe **Live 12.4.5 beta**
+2. Recupere une extension `.ablx`
+3. Ouvre **Live > Settings > Extensions**
+4. Ajoute ou importe le fichier
+5. Retourne dans ton Set et fais un **clic droit** sur l'element compatible
+
+Si l'extension attend une piste MIDI, un clip audio, une scene ou une vue Arrangement, elle n'apparaitra que dans ce contexte. C'est normal. Le menu depend du type d'objet selectionne.
+
+## Comment verifier que ca marche
+
+Le test le plus simple est d'utiliser une extension orientee workflow, par exemple **Track Creator**, **Duplicate Track** ou **Transpose Clips**. Elles sont rapides, sans configuration externe, et tu vois tout de suite si le menu apparait bien.
+
+Si tu importes une extension et que rien ne se passe :
+
+- verifie que tu es bien sur **Live Suite beta**
+- verifie que tu fais le clic droit sur le bon objet
+- relance Live apres installation si besoin
+- teste une extension plus simple avant une extension plus lourde comme **Basic Pitch** ou **Freesound Sampler**
+
+## A quoi servent ces scripts dans la vraie vie
+
+Le plus interessant, ce n'est pas juste "mettre du code dans Live". C'est de recuperer des actions repetitives que Live ne fait pas encore nativement : transposer tous les clips MIDI d'un Set, construire un arrangement a partir de scenes, cloner une piste sans ses clips, ou transformer un jeu en clip MIDI.
+
+En clair : les Extensions ouvrent un nouvel espace entre **workflow**, **automatisation** et **outil creatif ponctuel**.
+
+Dans la nouvelle rubrique **Ableton Extensions** de METABLETON, on va documenter les scripts du repo de Federico Pepe un par un pour voir lesquels valent vraiment le detour en production.

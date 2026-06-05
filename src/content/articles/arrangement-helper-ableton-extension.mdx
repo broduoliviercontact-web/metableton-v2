@@ -1,0 +1,41 @@
+---
+title: "Arrangement Helper : construire une structure de morceau directement dans Live"
+description: "Une extension Ableton qui cree des sections nommees et colorees dans l'arrangement a partir d'une piste MIDI."
+date: "2026-06-05"
+author: "METABLETON"
+section: "ableton-extensions"
+tags: ["ableton extensions","sdk","arrangement","workflow","midi"]
+cover: "/articles/ableton-extensions/arrangement-helper/header.png"
+coverAlt: "Arrangement Helper dans Ableton Live"
+featured: false
+draft: false
+---
+
+**Arrangement Helper** fait partie des extensions les plus immediatement utiles du repo de Federico Pepe. L'idee : construire une charpente de morceau avec des sections nommees, colorees et redimensionnables, directement depuis Live.
+
+Concretement, tu choisis des blocs comme *Intro*, *Verse* ou *Chorus*, tu leur donnes une longueur en mesures, puis l'extension genere des clips MIDI nommes sur la piste cible. Elle peut aussi placer des locators au debut de chaque section.
+
+## Pourquoi c'est interessant
+
+Pour beaucoup de producteurs, la friction ne vient pas du sound design mais du moment ou il faut transformer une loop en morceau. Cette extension sert exactement a ca : imposer une structure, visualiser la progression et rendre l'arrangement moins abstrait.
+
+Le mode edition est particulierement malin. Si tu relances l'extension sur une piste deja preparee, elle recharge les sections existantes pour les renommer, les deplacer ou les rallonger. Ce n'est donc pas juste un generateur one-shot.
+
+## Comment l'utiliser
+
+1. Passe en **Arrangement View**
+2. Selectionne une **piste MIDI**
+3. Fais clic droit puis lance **Create Arrangement Track...**
+4. Ajoute tes sections, leur longueur et leur couleur
+5. Valide pour creer la trame du morceau
+
+## Ce qu'il faut surveiller
+
+Le README signale une limite importante du SDK actuel : les clips audio recrees peuvent se desynchroniser, et les clips doivent etre coupes correctement selon la longueur des sections. Donc aujourd'hui, je vois surtout **Arrangement Helper** comme un outil de **pre-structuration** ou de **reconstruction propre d'un set**, pas comme une solution magique pour remodeler un projet deja dense en audio.
+
+## Verdict METABLETON
+
+Si tu composes a partir de scenes, de boucles ou d'idees fragmentaires, c'est une des extensions les plus prometteuses du lot. Pas glamour, mais tres utile.
+
+Source :
+[Arrangement Helper sur GitHub](https://github.com/federico-pepe/ableton-live-extensions/tree/main/extensions/arrangement-helper)

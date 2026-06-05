@@ -29,6 +29,12 @@ export const sections = [
     description:
       "Une lecture chronologique de l'ecosysteme Ableton : Live, Push, Move, Max for Live et grandes versions.",
   },
+  {
+    slug: "ableton-extensions",
+    title: "Ableton Extensions",
+    description:
+      "Scripts et outils construits avec le nouvel Extensions SDK d'Ableton : workflow, MIDI, arrangement et idees etranges.",
+  },
 ] as const;
 
 export type SectionSlug = (typeof sections)[number]["slug"];
