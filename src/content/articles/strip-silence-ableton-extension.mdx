@@ -1,0 +1,53 @@
+---
+title: "Strip Silence : découpe automatique des zones silencieuses"
+description: "Découpe automatique des zones silencieuses dans l'Arrangement"
+date: "2026-06-05"
+author: "METABLETON"
+section: "ableton-extensions"
+tags: ["ableton extensions","sdk","audio"]
+cover: "/articles/ableton-extensions/strip-silence/header.png"
+coverAlt: "Strip Silence : découpe automatique des zones silencieuses"
+featured: false
+draft: false
+---
+
+---
+title: "Strip Silence : découpe automatique des zones silencieuses"
+author: Alice Moss (ellismosss)
+category: audio / editing
+tags: [ableton extensions, sdk, audio, editing]
+github: https://github.com/ellismosss/strip-silence
+---
+
+# Strip Silence : découpe automatique des zones silencieuses
+
+Tu enregistres une prise vocale, un podcast, ou tu importes un pack de samples et tu passes ton temps à zoomer, sélectionner, supprimer les blancs à la main. Strip Silence fait exactement ce que son nom suggère : il détecte les passages silencieux et les retire automatiquement.
+
+## Pourquoi c'est utile
+
+C'est l'outil de nettoyage qu'on attendait tous dans Live. Au lieu de passer dix minutes à retailler un clip audio à la main, tu fixes un seuil de silence, une durée minimale, et l'extension fait le travail en une seule passe. Elle fonctionne sur un seul clip ou sur toute une piste, directement dans l'Arrangement.
+
+## Comment l'utiliser
+
+1. Sélectionne un ou plusieurs clips audio dans l'Arrangement, ou clique sur le header de la piste concernée.
+2. Fais un clic droit, puis Extensions → Strip Silence.
+3. Règle les paramètres :
+   - Threshold : le niveau en dessous duquel le son est considéré comme du silence (-60 dB par défaut, ajustable selon le bruit de fond de ta prise).
+   - Durée minimale : ignore les silences plus courts que cette valeur pour éviter de découper au milieu d'une respiration.
+   - Pre-roll et Post-roll : ajoutent une marge avant et après chaque coupe pour ne pas rogner trop serré.
+   - Ripple Edit : referme automatiquement les trous créés par la suppression des silences, ce qui compense la durée totale du clip.
+   - Cut to Nearest Beat : aligne chaque coupe sur la grille temporelle pour garder un rythme propre.
+4. Valide, et l'extension génère les nouveaux clips découpés directement dans l'Arrangement.
+
+## Verdict METABLETON
+
+Strip Silence est une extension qu'on va utiliser tout le temps. Nettoyage de prises vocales, préparation de samples, montage de podcasts : elle remplace une routine fastidieuse par une opération en deux clics. Le ripple edit est particulièrement bien pensé, et le cut to nearest beat évite de casser la grille. C'est propre, rapide, et ça fait ce qu'on attend de lui sans effets de bord.
+
+## Source
+
+GitHub : https://github.com/ellismosss/strip-silence
+
+## Articles liés
+
+- Paulstretch for Live : stretch extrême intégré à Live
+- Smart Batch Exporter : exporte les clips découpés en un clic
