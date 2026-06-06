@@ -12,6 +12,7 @@ const articles = defineCollection({
       "blog-news",
       "guides-ableton-live",
       "max-for-live",
+      "midi-tools",
       "freebies",
       "ableton-timeline",
       "ableton-extensions",

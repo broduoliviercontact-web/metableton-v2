@@ -28,6 +28,7 @@ collections:
           - { label: "Blog / News", value: "blog-news" }
           - { label: "Guides Ableton Live", value: "guides-ableton-live" }
           - { label: "Max for Live", value: "max-for-live" }
+          - { label: "Midi Tools", value: "midi-tools" }
           - { label: "Freebies", value: "freebies" }
           - { label: "Ableton Extensions", value: "ableton-extensions" }
           - { label: "ABLETON TIMELINE", value: "ableton-timeline" }

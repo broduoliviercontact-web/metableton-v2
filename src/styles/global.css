@@ -540,6 +540,15 @@ main {
   --article-line-color: rgba(96, 75, 23, 0.032);
 }
 
+.article-section-midi-tools {
+  --article-glow-a: rgba(178, 229, 210, 0.24);
+  --article-glow-b: rgba(236, 250, 244, 0.46);
+  --article-glow-c: rgba(145, 190, 174, 0.22);
+  --article-wash-start: rgba(228, 244, 237, 0.24);
+  --article-wash-end: rgba(255, 255, 255, 0.06);
+  --article-line-color: rgba(32, 89, 73, 0.030);
+}
+
 .article-section-blog-news {
   --article-glow-a: rgba(199, 214, 229, 0.30);
   --article-glow-b: rgba(242, 247, 250, 0.52);

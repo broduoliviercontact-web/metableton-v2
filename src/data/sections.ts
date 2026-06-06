@@ -18,6 +18,12 @@ export const sections = [
       "Devices, idées de patchs, méthodes et ressources pour explorer Max for Live dans un contexte musical réel.",
   },
   {
+    slug: "midi-tools",
+    title: "Midi Tools",
+    description:
+      "Generateurs, transformations MIDI et outils Max for Live pour composer autrement dans Ableton Live 12.",
+  },
+  {
     slug: "freebies",
     title: "Freebies",
     description:
